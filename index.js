@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const db = new sqlite3.Database('./backend/guestData.db');
+const db = new sqlite3.Database('./guestData.db');
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
