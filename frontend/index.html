@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Hochzeits-Sitzplatz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Willkommen zur Hochzeit!</h1>
+    <p>Bitte gib deinen Namen ein:</p>
+    <input type="text" id="guestName" placeholder="Dein Name">
+    <button onclick="findTable()">Tisch anzeigen</button>
+    <p id="result"></p>
 
+    <script>
+        async function findTable() {
+            const name = document.getElementById('guestName').value;
+            const response = await fetch('/api/getTable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('result').innerText = `Du sitzt an: ${result.table}`;
+            } else {
+                document.getElementById('result').innerText = result.error;
+            }
+        }
+    </script>
+</body>
+</html>
