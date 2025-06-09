@@ -3,38 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Wo sitze ich?</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        input { width: 100%; padding: 10px; font-size: 16px; }
+        button { padding: 10px 15px; font-size: 16px; margin-top: 10px; }
+        ul#suggestions { list-style: none; padding: 0; margin: 5px 0; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; }
+        ul#suggestions li { padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; }
+        ul#suggestions li:hover { background-color: #f0f0f0; }
+        #result { margin-top: 20px; font-size: 18px; }
+    </style>
 </head>
 <body>
     <h1>Willkommen zur Hochzeit</h1>
     <p>Bitte gib deinen Namen ein:</p>
 
-    <form id="lookupForm">
-        <input type="text" id="nameInput" placeholder="Dein Name" required>
-        <button type="submit">Tisch anzeigen</button>
-    </form>
-
-    <div id="result" style="margin-top: 20px;"></div>
+    <input type="text" id="nameInput" placeholder="Dein Name" autocomplete="off" required>
+    <ul id="suggestions"></ul>
+    <div id="result"></div>
 
     <script>
-        document.getElementById('lookupForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('nameInput').value.trim();
+        const input = document.getElementById('nameInput');
+        const suggestions = document.getElementById('suggestions');
+        const resultDiv = document.getElementById('result');
 
+        input.addEventListener('input', async () => {
+            const query = input.value.trim();
+            if (query.length === 0) {
+                suggestions.innerHTML = '';
+                return;
+            }
+
+            const response = await fetch(`/api/suggest?q=${encodeURIComponent(query)}`);
+            const names = await response.json();
+
+            suggestions.innerHTML = '';
+            names.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                li.addEventListener('click', () => {
+                    input.value = name;
+                    suggestions.innerHTML = '';
+                    fetchTable(name);
+                });
+                suggestions.appendChild(li);
+            });
+        });
+
+        async function fetchTable(name) {
             const response = await fetch('/api/getTable', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name })
             });
 
-            const resultDiv = document.getElementById('result');
             const data = await response.json();
-
             if (response.ok) {
                 resultDiv.innerHTML = `<strong>Dein Tisch:</strong> ${data.table}`;
             } else {
                 resultDiv.innerHTML = `<span style="color:red;">${data.error}</span>`;
             }
-        });
+        }
     </script>
 </body>
 </html>
