@@ -10,9 +10,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '/frontend')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
-// API-Endpunkt für die Namenssuche
+// 🔍 API für Tischnummer anhand des Namens
 app.post('/api/getTable', (req, res) => {
     const name = req.body.name.trim().toLowerCase();
 
@@ -30,9 +30,29 @@ app.post('/api/getTable', (req, res) => {
     });
 });
 
-// Route zur Startseite (liefert index.html aus frontend-Ordner)
+// 🔤 API für Auto-Suggest (Namensvorschläge)
+app.get('/api/suggest', (req, res) => {
+    const query = req.query.q?.toLowerCase() || '';
+    if (!query || query.length < 1) {
+        return res.json([]);
+    }
+
+    db.all(
+        "SELECT name FROM guests WHERE LOWER(name) LIKE ? LIMIT 5",
+        [`${query}%`],
+        (err, rows) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Fehler bei der Namenssuche' });
+            }
+            res.json(rows.map(r => r.name));
+        }
+    );
+});
+
+// Route für Startseite
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/frontend/index.html'));
+    res.sendFile(path.join(__dirname, 'frontend/index.html'));
 });
 
 // Server starten
