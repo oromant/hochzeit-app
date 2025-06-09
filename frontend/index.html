@@ -2,31 +2,39 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Hochzeits-Sitzplatz</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Wo sitze ich?</title>
 </head>
 <body>
-    <h1>Willkommen zur Hochzeit!</h1>
+    <h1>Willkommen zur Hochzeit</h1>
     <p>Bitte gib deinen Namen ein:</p>
-    <input type="text" id="guestName" placeholder="Dein Name">
-    <button onclick="findTable()">Tisch anzeigen</button>
-    <p id="result"></p>
+
+    <form id="lookupForm">
+        <input type="text" id="nameInput" placeholder="Dein Name" required>
+        <button type="submit">Tisch anzeigen</button>
+    </form>
+
+    <div id="result" style="margin-top: 20px;"></div>
 
     <script>
-        async function findTable() {
-            const name = document.getElementById('guestName').value;
+        document.getElementById('lookupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('nameInput').value.trim();
+
             const response = await fetch('/api/getTable', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name })
             });
-            const result = await response.json();
+
+            const resultDiv = document.getElementById('result');
+            const data = await response.json();
+
             if (response.ok) {
-                document.getElementById('result').innerText = `Du sitzt an: ${result.table}`;
+                resultDiv.innerHTML = `<strong>Dein Tisch:</strong> ${data.table}`;
             } else {
-                document.getElementById('result').innerText = result.error;
+                resultDiv.innerHTML = `<span style="color:red;">${data.error}</span>`;
             }
-        }
+        });
     </script>
 </body>
 </html>
