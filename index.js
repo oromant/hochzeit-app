@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '/frontend')));
 
 // API-Endpunkt für die Namenssuche
 app.post('/api/getTable', (req, res) => {
@@ -32,7 +32,7 @@ app.post('/api/getTable', (req, res) => {
 
 // Route zur Startseite (liefert index.html aus frontend-Ordner)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(__dirname, '/frontend/index.html'));
 });
 
 // Server starten
