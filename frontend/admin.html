@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Adminbereich – Gäste verwalten</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 30px auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        input { padding: 5px; width: 100%; }
+        .danger { color: red; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Admin: Gäste verwalten</h1>
+
+    <div id="loginSection">
+        <p>Bitte Passwort eingeben:</p>
+        <input type="password" id="adminPassword" placeholder="Passwort">
+        <button onclick="checkPassword()">Login</button>
+        <div id="loginError" style="color:red;"></div>
+    </div>
+
+    <div id="adminSection" style="display:none;">
+        <h2>Neuen Gast hinzufügen</h2>
+        <input type="text" id="newName" placeholder="Name">
+        <input type="text" id="newTable" placeholder="Tischnummer">
+        <button onclick="addGuest()">Hinzufügen</button>
+
+        <h2>Gästeliste</h2>
+        <table id="guestTable">
+            <thead>
+                <tr><th>Name</th><th>Tischnummer</th><th>Aktion</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const PASSWORD = "admin123";
+
+        function checkPassword() {
+            const pw = document.getElementById('adminPassword').value;
+            if (pw === PASSWORD) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'block';
+                loadGuests();
+            } else {
+                document.getElementById('loginError').textContent = "Falsches Passwort";
+            }
+        }
+
+        async function loadGuests() {
+            const res = await fetch('/api/guests');
+            const guests = await res.json();
+            const tbody = document.querySelector('#guestTable tbody');
+            tbody.innerHTML = '';
+
+            guests.forEach(guest => {
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td><input value="${guest.name}" onchange="updateGuest(${guest.id}, this.value, null)"></td>
+                    <td><input value="${guest.table_number}" onchange="updateGuest(${guest.id}, null, this.value)"></td>
+                    <td><span class="danger" onclick="deleteGuest(${guest.id})">Löschen</span></td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function addGuest() {
+            const name = document.getElementById('newName').value;
+            const table = document.getElementById('newTable').value;
+            await fetch('/api/addGuest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, table_number: table })
+            });
+            document.getElementById('newName').value = '';
+            document.getElementById('newTable').value = '';
+            loadGuests();
+        }
+
+        async function updateGuest(id, newName, newTable) {
+            const row = document.querySelector(`#guestTable tr input[value="${newName || newTable}"]`).parentElement.parentElement;
+            const name = newName !== null ? newName : row.children[0].children[0].value;
+            const table_number = newTable !== null ? newTable : row.children[1].children[0].value;
+
+            await fetch('/api/updateGuest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, name, table_number })
+            });
+        }
+
+        async function deleteGuest(id) {
+            await fetch('/api/deleteGuest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            loadGuests();
+        }
+    </script>
+</body>
+</html>
