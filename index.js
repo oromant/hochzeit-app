@@ -22,6 +22,11 @@ app.post('/api/getTable', (req, res) => {
     });
 });
 
+// ✅ Diese Route ergänzt die Startseite
+app.get('/', (req, res) => {
+    res.send('Willkommen zur Hochzeitsseite!'); // oder res.redirect('/guest')
+});
+
 app.listen(PORT, () => {
     console.log(`Server läuft auf Port ${PORT}`);
 });
