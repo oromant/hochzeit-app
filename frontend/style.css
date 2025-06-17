@@ -1,23 +1,70 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-}
-
-input {
+    font-family: sans-serif;
+    max-width: 700px;
+    margin: 20px auto;
     padding: 10px;
-    font-size: 16px;
-    width: 300px;
 }
 
-button {
-    padding: 10px 20px;
+input, button {
     font-size: 16px;
-    margin-top: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-#result {
+table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+td input {
+    width: 100%;
+    font-size: 14px;
+}
+
+.danger {
+    color: red;
+    cursor: pointer;
     font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    td {
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+    }
+
+    td:nth-of-type(1):before { content: "Name"; }
+    td:nth-of-type(2):before { content: "Tischnummer"; }
+    td:nth-of-type(3):before { content: "Aktion"; }
 }
