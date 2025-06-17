@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --accent: #a88cc9;
-            --accent-dark: #8c6bbf;
-            --background: #f9f6fc;
-            --text: #2c3e50;
-            --error: #e74c3c;
+            --beige: #f5f1e6;
+            --beige-dark: #e0d8c0;
+            --text: #3e3e3e;
+            --highlight: #b8a77e;
+            --error: #c0392b;
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: var(--background);
+            background-color: var(--beige);
             color: var(--text);
             max-width: 600px;
             margin: 30px auto;
@@ -25,27 +25,31 @@
         h1 {
             font-family: 'Georgia', serif;
             text-align: center;
-            color: var(--accent-dark);
+            color: var(--highlight);
+            margin-bottom: 20px;
         }
 
         p {
             text-align: center;
+            margin-bottom: 20px;
         }
 
         input {
             width: 100%;
             padding: 12px;
             font-size: 18px;
-            border: 2px solid var(--accent);
+            border: 2px solid var(--highlight);
             border-radius: 5px;
             box-sizing: border-box;
+            background-color: white;
+            color: var(--text);
         }
 
         ul#suggestions {
             list-style: none;
             padding: 0;
             margin: 5px 0;
-            border: 1px solid var(--accent);
+            border: 1px solid var(--highlight);
             border-radius: 5px;
             background-color: white;
             max-height: 150px;
@@ -61,14 +65,18 @@
         }
 
         ul#suggestions li:hover {
-            background-color: var(--accent);
+            background-color: var(--highlight);
             color: white;
         }
 
         #result {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 20px;
             text-align: center;
+        }
+
+        #result strong {
+            color: var(--highlight);
         }
 
         @media (max-width: 480px) {
