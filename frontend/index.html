@@ -3,14 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Wo sitze ich?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        input { width: 100%; padding: 10px; font-size: 16px; }
-        button { padding: 10px 15px; font-size: 16px; margin-top: 10px; }
-        ul#suggestions { list-style: none; padding: 0; margin: 5px 0; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; }
-        ul#suggestions li { padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; }
-        ul#suggestions li:hover { background-color: #f0f0f0; }
-        #result { margin-top: 20px; font-size: 18px; }
+        :root {
+            --accent: #a88cc9;
+            --accent-dark: #8c6bbf;
+            --background: #f9f6fc;
+            --text: #2c3e50;
+            --error: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            color: var(--accent-dark);
+        }
+
+        p {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid var(--accent);
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        ul#suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0;
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            background-color: white;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        ul#suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        ul#suggestions li:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            input {
+                font-size: 16px;
+            }
+
+            #result {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -60,7 +137,7 @@
             if (response.ok) {
                 resultDiv.innerHTML = `<strong>Dein Tisch:</strong> ${data.table}`;
             } else {
-                resultDiv.innerHTML = `<span style="color:red;">${data.error}</span>`;
+                resultDiv.innerHTML = `<span style="color: var(--error);">${data.error}</span>`;
             }
         }
     </script>
