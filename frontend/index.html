@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Wo sitze ich?</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Eleganter Google Font für R&E -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --beige: #f5f1e6;
@@ -26,7 +30,15 @@
             font-family: 'Georgia', serif;
             text-align: center;
             color: var(--highlight);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        .monogram {
+            font-family: 'Great Vibes', cursive;
+            font-size: 46px;
+            text-align: center;
+            color: var(--highlight);
+            margin-bottom: 25px;
         }
 
         p {
@@ -88,6 +100,10 @@
                 font-size: 22px;
             }
 
+            .monogram {
+                font-size: 36px;
+            }
+
             input {
                 font-size: 16px;
             }
@@ -98,13 +114,9 @@
         }
     </style>
 </head>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <body>
     <h1>Willkommen zur Hochzeit von Ebru und Roman</h1>
-
-<div style="font-family: 'Great Vibes', cursive; font-size: 46px; text-align: center; margin: 10px 0 25px; color: #b8a77e;">
-    R & E
-</div>
+    <div class="monogram">R & E</div>
     <p>Bitte gib deinen Namen ein:</p>
 
     <input type="text" id="nameInput" placeholder="Dein Name" autocomplete="off" required>
